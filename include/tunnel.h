@@ -21,6 +21,7 @@ typedef struct lm_tunnel_s {
     int x;
     int y;
     int type;
+    int link_nb;
     struct lm_tunnel_s **links;
 }lm_tunnel_t;
 

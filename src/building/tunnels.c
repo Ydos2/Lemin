@@ -5,6 +5,8 @@
 ** tunnels
 */
 
+#include <stdlib.h>
+#include "vector2.h"
 #include "tunnel.h"
 #include "my.h"
 
@@ -16,31 +18,42 @@ static int has_char(char *str, char c)
     return (str[i] == c);
 }
 
-/* //UNFINISHED\\ */
-
-int get_tunnels(char **file, lm_tunnel_t **tunnels)
+lm_tunnel_t *search_node(char *name, lm_tunnel_t **list)
 {
-    int line = 0;
+    int i = 0;
+    
+    for (; list[i] != NULL && my_strcmp(name, list[i]->name) != 0; i++);;
+    return (list[i]);
+}
 
-    while (file[line] && !has_char(file[line], '-')) {
+lm_tunnel_t **add_space(lm_tunnel_t **tunnel, int nb)
+{
+    lm_tunnel_t **new = malloc(sizeof(lm_tunnel_t *) * (nb + 1));
 
+    if (tunnel == NULL) {
+        new[nb - 1] = malloc(sizeof(lm_tunnel_t));
+        new[nb] = 0;
+        return (new);
     }
+    for (int i = 0; i != nb; i++)
+        new[i] = tunnel[i];
+    new[nb - 1] = malloc(sizeof(lm_tunnel_t));
+    new[nb] = NULL;
+    free(tunnel);
+    return (new);
 }
 
-int count_tunnels(char **file)
+void add_tunnel(lm_tunnel_t ***tunnel, vector2_t pos, char *name, int nb)
 {
-    int tunnels = 0;
+    lm_tunnel_t **lm_tunnel;
 
-    for (int i = 0; file[i] && !has_char(file[i], '-'); )
-        if (file[i][0] == '#')
-            tunnels++;
-    return (tunnels);
-}
-
-void add_tunnel(lm_tunnel_t *tunnel, int x, int y, char *name)
-{
-    tunnel->x = x;
-    tunnel->y = y;
-    tunnel->name = name;
-    tunnel->links = 0;
+    my_strlen(name);
+    *tunnel = add_space(*tunnel, nb);
+    lm_tunnel = *tunnel;
+    lm_tunnel[nb - 1]->x = pos.x;
+    lm_tunnel[nb - 1]->y = pos.y;
+    lm_tunnel[nb - 1]->name = my_strdup(name);
+    lm_tunnel[nb - 1]->link_nb = 0;
+    lm_tunnel[nb - 1]->links = 0;
+    my_strlen(name);
 }

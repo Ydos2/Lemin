@@ -6,6 +6,7 @@
 */
 
 #include <stdlib.h>
+#include "build_anthill.h"
 #include "vector2.h"
 #include "tunnel.h"
 #include "my.h"
@@ -17,76 +18,100 @@ int get_command(char *cmd, int actual_type)
 
     if (actual_type == CHECK)
         return (has_end == 1 && has_start == 1);
-    if (my_strcmp(cmd, "start")) {
+    if (my_strcmp(cmd, "start") == 0) {
         has_start++;
         return (START);
     }
-    if (my_strcmp(cmd, "end")) {
+    if (my_strcmp(cmd, "end") == 0) {
         has_end++;
         return (END);
     }
     return (actual_type);
 }
 
-int is_valid_tunnel(char *str, lm_tunnel_t *tunnel, int type)
+int is_valid_tunnel(char *str, lm_tunnel_t ***tunnel, int type, int tunnel_nb)
 {
     char *name = NULL;
     vector2_t vect;
     int pos = 0;
 
-    pos = my_strjump(str, ' ');
-    if (!str[pos] || str[0] == '#')
+    pos = my_strjump(str, ' ') + 1;
+    if (!str[pos - 1] || !str[pos] || str[0] == '#')
         return (0);
-    name = malloc(sizeof(char) * pos + 1);
-    name = my_strncpy(name, str, pos);
-    vect.x = my_getnbr(str + pos + 1);
-    pos += my_strjump(str + pos, ' ');
-    if (!str[pos])
+    name = my_strndup(str, pos - 1);
+    vect.x = my_getnbr(str + pos);
+    if (str[pos] == '-')
         return (0);
-    vect.y = my_getnbr(str + pos + 1);
+    pos += my_strjump(str + pos, ' ') + 1;
+    if (!str[pos - 1] || !str[pos])
+        return (0);
+    vect.y = my_getnbr(str + pos);
     pos += my_strjump(str + pos, ' ');
-    if (str[pos] != 0 && str[pos] != '\n')
+    if (str[pos] != 0)
         free(name);
-    add_tunnel(tunnel, vect.x, vect.y, name);
+    add_tunnel(tunnel, vect, name, tunnel_nb);
     return (1);
 }
 
-lm_tunnel_t **build_tunnels(char **file)
+void is_linker(char *entry, lm_tunnel_t **anthill)
 {
-    lm_tunnel_t **new = NULL;
-    int i = 0;
-    int next_type = NORMAL;
-    int size = count_tunnels(file + 1);
+    char *first;
+    lm_tunnel_t *f_node = NULL;
+    lm_tunnel_t *s_node = NULL;
+    int pos = 0;
+    
+    if (!anthill)
+        return;
+    first = my_strndup(entry, my_strjump(entry, '-'));
+    f_node = search_node(first, anthill);
+    free(first);
+    if (entry[my_strjump(entry, '-')] == '\0')
+        return;
+    s_node = search_node(entry + my_strjump(entry, '-') + 1, anthill);
+    if (!s_node || !f_node)
+        return;
+    link_nodes(f_node, s_node);
+}
 
-    if (size < 2)
-        return (NULL);
-    new = malloc(sizeof(lm_tunnel_t *) * (count_tunnels(file + 1) + 1));
-    for (int x = 1; x != size; x++) {
-        if (file[x][0] == '#' && file[x][1] == '#')
-            next_type = get_command(file[x] + 2, next_type);
-        else if (is_valid_tunnel(file[x], new[i], next_type)) {
-            new[i]->type = next_type;
-            next_type = NORMAL;
-            i++;
-        }
+lm_tunnel_t **build_tunnels(void)
+{
+    lm_tunnel_t **anthill = NULL;
+    char *user_entry = NULL;
+    int tunnel_nb = 0;
+    int tunnel_type = NORMAL;
+
+    while (1) {
+        user_entry = get_user_entry(user_entry);
+        if (!user_entry)
+            break;
+        if (is_valid_tunnel(user_entry, &anthill, tunnel_type, tunnel_nb + 1)) {
+            anthill[tunnel_nb]->type = tunnel_type;
+            tunnel_type = NORMAL;
+            tunnel_nb++;
+        } else if (user_entry[0] == '#' && user_entry[1] == '#')
+            tunnel_type = get_command(user_entry + 2, tunnel_type);
+        else
+            is_linker(user_entry, anthill);
     }
-    new[i] = NULL;
-    return (new);
+    return (anthill);
 }
 
 lm_tunnel_t **build_anthill(char *filepath)
 {
-    char **file = read_file(filepath);
+    char *user_entry = NULL;
     int ant = 0;
     lm_tunnel_t **anthill = NULL;
     int link_position = 0;
 
-    if (!file)
+    user_entry = get_user_entry(user_entry);
+    ant = my_getnbr(user_entry);
+    if (!user_entry || ant <= 0)
         return (NULL);
-    allocate_anthill(file);
-    ant = my_getnbr(file[0]);
-    if (ant <= 0 || !file)
-        return (NULL);
-    link_position = get_tunnels(file + 1, anthill);
-    link_tunnels(file + link_position, anthill);
+    anthill = build_tunnels();
+    /// PUT DEBUG FUNCTIONS HERE | DELETE THIS BEFORE PUSHING INTO MASTER ///
+        display_nodes(anthill);
+        printf("\n");
+        display_links(search_node("3", anthill));
+    /// PUT DEBUG FUNCTIONS HERE | DELETE THIS BEFORE PUSHING INTO MASTER ///
+    return (anthill);
 }

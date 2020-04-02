@@ -7,16 +7,15 @@
 
 MAIN =	src/main.c
 
-SRC	=	src/create_box.c \
-		src/setting_errors.c \
-		src/matchstick.c \
-		src/player_turn.c \
-		src/game_loop.c \
-		src/remove_matches.c
+SRC	=	src/building/build_anthill.c \
+		src/building/get_user_entry.c \
+		src/building/tunnels.c \
+		src/building/link.c \
+		src/building/debug/debug.c
 
 OBJ	=	$(SRC:.c=.o) $(MAIN:.c=.o)
 
-NAME	=	matchstick
+NAME	=	lemin
 
 TEST_NAME	=	tests_a.out
 

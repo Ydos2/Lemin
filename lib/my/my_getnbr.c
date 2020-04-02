@@ -79,10 +79,13 @@ int my_getnbr(const char *str)
 {
     int num = 0;
     char num_str[15];
-    int i = find_the_num(str);
+    int i = 0;
     int positive = 1;
     int x = 0;
 
+    if (!str)
+        return (-1);
+    i = find_the_num(str);
     while (str[x] != '\0') {
         if (str[x] == '-')
             positive = (positive == 1) ? 0 : 1;
