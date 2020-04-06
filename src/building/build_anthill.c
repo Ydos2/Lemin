@@ -108,10 +108,6 @@ lm_tunnel_t **build_anthill(char *filepath)
     if (!user_entry || ant <= 0)
         return (NULL);
     anthill = build_tunnels();
-    /// PUT DEBUG FUNCTIONS HERE | DELETE THIS BEFORE PUSHING INTO MASTER ///
-        display_nodes(anthill);
-        printf("\n");
-        display_links(search_node("3", anthill));
-    /// PUT DEBUG FUNCTIONS HERE | DELETE THIS BEFORE PUSHING INTO MASTER ///
+    debug_anthill(anthill);
     return (anthill);
 }
