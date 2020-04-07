@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "my.h"
 #include "main.h"
+#include "path.h"
 
 static void draw_help(void)
 {
@@ -18,10 +19,15 @@ static void draw_help(void)
 static int start_lemin(char **av, int debug)
 {
     lm_tunnel_t **tunnels = 0;
+    path_t p = {0};
 
     tunnels = build_anthill(av[1], debug);
     if (!tunnels)
         return (84);
+    p = get_new_path(tunnels, 0);
+    free(p.path);
+    p = get_new_path(tunnels, 1, "15", "6");
+    free(p.path);
     return (0);
 }
 

@@ -21,7 +21,7 @@ static int has_char(char *str, char c)
 lm_tunnel_t *search_node(char *name, lm_tunnel_t **list)
 {
     int i = 0;
-    
+
     for (; list[i] != NULL && my_strcmp(name, list[i]->name) != 0; i++);;
     return (list[i]);
 }

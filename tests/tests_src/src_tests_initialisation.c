@@ -21,7 +21,7 @@ static void redirect_all_std(void)
 Test (build_tunnels, anthill_test, .init = redirect_all_std)
 {
     lm_tunnel_t **anthill = NULL;
-    
+
     anthill = build_tunnels();
     cr_assert_eq(anthill[0]->x, 0);
 }

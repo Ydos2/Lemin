@@ -10,7 +10,6 @@
 
 #include "tunnel.h"
 
-void display_links(lm_tunnel_t *tunnel);
-void display_nodes(lm_tunnel_t **anthill);
+extern const int debug;
 
 #endif /* !DEBUG_H_ */

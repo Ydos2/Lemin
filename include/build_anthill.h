@@ -16,4 +16,7 @@ char *get_user_entry(char *old_entry);
 void add_tunnel(lm_tunnel_t ***tunnel, vector2_t pos, char *name, int nb);
 void link_nodes(lm_tunnel_t *first, lm_tunnel_t *second);
 
+//debug
+void debug_anthill(lm_tunnel_t **anthill);
+
 #endif /* !BUILD_ANTHILL_H_ */
