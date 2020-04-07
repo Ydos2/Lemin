@@ -5,9 +5,6 @@
 ** debug
 */
 
-#ifndef DEBUG_H_
-#define DEBUG_H_
+#include "debug.h"
 
-extern const int debug;
-
-#endif /*DEBUG*/
+const int debug = 0;

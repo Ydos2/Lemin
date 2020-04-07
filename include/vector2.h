@@ -13,4 +13,9 @@ typedef struct vector2_s {
     int y;
 }vector2_t;
 
+typedef struct vector2s_s {
+    char *from;
+    char *to;
+}vector2s_t;
+
 #endif /* !VECTOR2_H_ */

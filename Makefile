@@ -14,6 +14,10 @@ SRC	=	src/building/build_anthill.c \
 		src/building/debug/debug_anthill.c \
 		src/all_star/debug_all_star.c \
 		src/all_star/all_star.c \
+		src/all_star/node.c \
+		src/all_star/all_star_utils.c \
+		src/all_star/create_path.c \
+		src/debug.c \
 
 OBJ	=	$(SRC:.c=.o) $(MAIN:.c=.o)
 
