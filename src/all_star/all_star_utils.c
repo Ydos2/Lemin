@@ -32,11 +32,10 @@ void set_start(lm_tunnel_t **tunnels)
     return;
 }
 
-int is_blocked(char *from, char *to, all_star_init_data_t init_data)
+int is_blocked(char *node, all_star_init_data_t init_data)
 {
     for (int i = 0; i < init_data.rb_size; i++) {
-        if (!fae_strcmp(from, init_data.rb[i].from)
-            && !fae_strcmp(to, init_data.rb[i].to))
+        if (!fae_strcmp(node, init_data.rb[i]))
             return 1;
     }
     return 0;
