@@ -5,7 +5,7 @@
 ** Creates an array of all the shortest paths not crossing each other.
 */
 
-#include "tunnel.h"
+#include "ant_management.h"
 
 path_t *get_shortest_paths(lm_tunnel_t **tunnels)
 {
@@ -41,7 +41,7 @@ int find_shortest_paths(lm_tunnel_t **tunnels, path_t *paths, int nb_paths)
 
     for (int i = 0; i < nb_paths; i++) {
         roadblocks = get_roadblocks(&roadblocks_nb, roadblocks, paths[i]);
-        if (!roadblocks)
+        if (!roadblocks && i != 0)
             return (84);
         paths[i] = get_new_path_srb(tunnels, roadblocks_nb, roadblocks);
         if (paths[i].len == -1) {
@@ -53,24 +53,26 @@ int find_shortest_paths(lm_tunnel_t **tunnels, path_t *paths, int nb_paths)
     return (0);
 }
 
-vector2s_t *get_roadblocks(int *roadblcks_nb, char **roadblcks, path_t path)
+char **get_roadblocks(int *roadblcks_nb, char **roadblcks, path_t path)
 {
     int new_roadblcks_nb = 0;
     char **new_roadblcks = NULL;
 
     new_roadblcks_nb = path.len - 2;
+    if (new_roadblcks_nb <= 0)
+        return (roadblcks);
     new_roadblcks = malloc(sizeof(char *) * (*roadblcks_nb + new_roadblcks_nb));
     if (!new_roadblcks) {
         if (roadblcks)
-            free(roadblcks)
+            free(roadblcks);
         return (NULL);
     }
-    for (int i = 0; i < roadblcks_nb; i++)
+    for (int i = 0; i < *roadblcks_nb; i++)
         new_roadblcks[i] = roadblcks[i];
     for (int i = 0; i < new_roadblcks_nb; i++)
-        new_roadblcks[roadblcks_nb + i] = path.path[i + 1];
+        new_roadblcks[*roadblcks_nb + i] = ((path.path)[i + 1])->name;
     if (roadblcks)
-        free(roadblcks)
+        free(roadblcks);
     (*roadblcks_nb) += new_roadblcks_nb;
     return (new_roadblcks);
 }

@@ -5,9 +5,9 @@
 ** Decides, at evey lap, which paths will be taken by an ant.
 */
 
-#include ""
+#include "ant_management.h"
 
-void display_ants_movements(path_t *paths, int nb_of_ants)
+int display_ants_movements(path_t *paths, int nb_of_ants)
 {
     int *ants_per_path = NULL;
 
@@ -38,8 +38,10 @@ int *get_ants_per_path(path_t *paths, int nb_of_ants)
     return (ants_per_path);
 }
 
-path_t *get_default_distribution(path_t *paths, int nb_ants, int *nb_paths)
+int *get_default_distribution(path_t *paths, int nb_ants, int *nb_paths)
 {
+    int *ants_per_path = NULL;
+
     for (; paths[*nb_paths].len != -1; (*nb_paths)++);
     ants_per_path = malloc(sizeof(int) * (*nb_paths + 1));
     if (!ants_per_path)
@@ -57,10 +59,10 @@ int is_current_path_worth_it(int *ants_per_path, path_t *paths, int path_index)
     int lapses_after = 0;
 
     lapses_before = get_total_lapses(ants_per_path, paths);
-    (ants_per_path[i])++;
+    (ants_per_path[path_index])++;
     (ants_per_path[0])--;
     lapses_before = get_total_lapses(ants_per_path, paths);
-    (ants_per_path[i])--;
+    (ants_per_path[path_index])--;
     (ants_per_path[0])++;
     if (lapses_before > lapses_after)
         return (1);

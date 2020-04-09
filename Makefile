@@ -17,6 +17,9 @@ SRC	=	src/building/build_anthill.c \
 		src/all_star/node.c \
 		src/all_star/all_star_utils.c \
 		src/all_star/create_path.c \
+		src/ant_management/get_shortest_paths.c\
+		src/ant_management/ants_movements.c\
+		src/display/display.c\
 		src/debug.c \
 
 TESTS	=	tests/tests_lib/lib_tests_getnbr.c			\
@@ -68,7 +71,7 @@ lib_fclean:
 	@make fclean -C lib/fae
 	@make fclean -C lib/list
 
-$(NAME): lib_make $(OBJ)	
+$(NAME): lib_make $(OBJ)
 	@gcc -o $(NAME) $(CFLAGS) $(OBJ) $(LIBS)
 
 clean: lib_clean

@@ -9,6 +9,7 @@
 #include "my.h"
 #include "main.h"
 #include "path.h"
+#include "ant_management.h"
 
 static void draw_help(void)
 {
@@ -28,8 +29,11 @@ static int start_lemin(char **av, int debug)
     paths = get_shortest_paths(tunnels);
     if (!paths)
         return (84);
-    display_infos(); // TODO
-    display_ants_movements(paths, nb_ants);
+    display_infos_anthill_stdout(nb_ants, tunnels);
+    if (display_ants_movements(paths, nb_ants) == 84) {
+        free_paths(paths);
+        return (84);
+    }
     free_paths(paths);
     return (0);
 }
