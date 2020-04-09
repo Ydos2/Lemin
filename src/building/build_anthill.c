@@ -109,6 +109,7 @@ lm_tunnel_t **build_anthill(char *filepath, int *nb_ants, int debug)
     if (!user_entry || *nb_ants <= 0)
         return (NULL);
     anthill = build_tunnels();
-    debug_anthill(anthill);
+    if (debug == 1)
+        debug_anthill(anthill);
     return (anthill);
 }

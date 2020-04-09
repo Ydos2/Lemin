@@ -40,8 +40,6 @@ static void display_nodes(lm_tunnel_t **anthill)
 
 void debug_anthill(lm_tunnel_t **anthill)
 {
-    if (!debug)
-        return;
     display_nodes(anthill);
     fae_put("\n");
 }
