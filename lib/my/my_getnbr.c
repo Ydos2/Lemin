@@ -77,7 +77,6 @@ static int my_atoi(char str[], int is_positive)
 
 int my_getnbr(const char *str)
 {
-    int num = 0;
     char num_str[15];
     int i = 0;
     int positive = 1;
