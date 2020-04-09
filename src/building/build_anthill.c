@@ -11,34 +11,26 @@
 #include "tunnel.h"
 #include "my.h"
 
-int get_command(char *cmd, int actual_type)
-{
-    static int has_end = 0;
-    static int has_start = 0;
-
-    if (actual_type == CHECK)
-        return (has_end == 1 && has_start == 1);
-    if (my_strcmp(cmd, "start") == 0) {
-        has_start++;
-        return (START);
-    }
-    if (my_strcmp(cmd, "end") == 0) {
-        has_end++;
-        return (END);
-    }
-    return (actual_type);
-}
-
-int is_valid_tunnel(char *str, lm_tunnel_t ***tunnel, int type, int tunnel_nb)
+char *get_tunnel_name(char *str)
 {
     char *name = NULL;
-    vector2_t vect;
     int pos = 0;
 
     pos = my_strjump(str, ' ') + 1;
     if (!str[pos - 1] || !str[pos] || str[0] == '#')
         return (0);
     name = my_strndup(str, pos - 1);
+    return (name);
+}
+
+int is_valid_tunnel(char *str, lm_tunnel_t ***tunnel, int type, int tunnel_nb)
+{
+    char *name = get_tunnel_name(str);
+    vector2_t vect;
+    int pos = my_strjump(str, ' ') + 1;
+
+    if (!name)
+        return (0);
     vect.x = my_getnbr(str + pos);
     if (str[pos] == '-')
         return (0);
@@ -47,8 +39,10 @@ int is_valid_tunnel(char *str, lm_tunnel_t ***tunnel, int type, int tunnel_nb)
         return (0);
     vect.y = my_getnbr(str + pos);
     pos += my_strjump(str + pos, ' ');
-    if (str[pos] != 0)
+    if (str[pos] != 0 && str[pos+ 1] != '#') {
         free(name);
+        return (0);
+    }
     add_tunnel(tunnel, vect, name, tunnel_nb);
     return (1);
 }
