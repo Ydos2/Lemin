@@ -68,7 +68,7 @@ lib_fclean:
 	@make fclean -C lib/fae
 	@make fclean -C lib/list
 
-$(NAME): lib_make $(OBJ)	
+$(NAME): lib_make $(OBJ)
 	@gcc -o $(NAME) $(CFLAGS) $(OBJ) $(LIBS)
 
 clean: lib_clean
