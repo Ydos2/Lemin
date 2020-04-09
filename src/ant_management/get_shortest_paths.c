@@ -37,10 +37,10 @@ int get_max_nb_of_paths(lm_tunnel_t **tunnels)
 int find_shortest_paths(lm_tunnel_t **tunnels, path_t *paths, int nb_paths)
 {
     int roadblocks_nb = 0;
-    vector2s_t *roadblocks = NULL;
+    char **roadblocks = NULL;
 
     for (int i = 0; i < nb_paths; i++) {
-        roadblocks = add_roadblocks(&roadblocks_nb, roadblocks, paths, i);
+        roadblocks = get_roadblocks(&roadblocks_nb, roadblocks, paths[i]);
         if (!roadblocks)
             return (84);
         paths[i] = get_new_path_srb(tunnels, roadblocks_nb, roadblocks);
@@ -49,30 +49,30 @@ int find_shortest_paths(lm_tunnel_t **tunnels, path_t *paths, int nb_paths)
             return (0);
         }
     }
+    free(roadblocks);
     return (0);
 }
 
-vector2s_t *add_roadblocks(int *rbk_nb, vector2s_t *rbk, path_t *paths, i_path)
+vector2s_t *get_roadblocks(int *roadblcks_nb, char **roadblcks, path_t path)
 {
-    vector2s_t *new_rbk = NULL;
-    int new_rbk_nb = 0;
+    int new_roadblcks_nb = 0;
+    char **new_roadblcks = NULL;
 
-    for (int i = 0; paths[i_path].path[i]; i++)
-        new_rbk_nb++;
-    new_rbk = malloc(sizeof(vector2s_t) * (*rbk_nb + new_rbk_nb));
-    if (!new_rbk)
+    new_roadblcks_nb = path.len - 2;
+    new_roadblcks = malloc(sizeof(char *) * (*roadblcks_nb + new_roadblcks_nb));
+    if (!new_roadblcks) {
+        if (roadblcks)
+            free(roadblcks)
         return (NULL);
-
-    // TODO : finish
-
-    for (int i = 0; paths[i].len != -1; i++) {
-        for (int j = 0; paths[i].path[j]; j++)
-            (*rbk_nb)++;
     }
-
-
-
-    return (new_rbk);
+    for (int i = 0; i < roadblcks_nb; i++)
+        new_roadblcks[i] = roadblcks[i];
+    for (int i = 0; i < new_roadblcks_nb; i++)
+        new_roadblcks[roadblcks_nb + i] = path.path[i + 1];
+    if (roadblcks)
+        free(roadblcks)
+    (*roadblcks_nb) += new_roadblcks_nb;
+    return (new_roadblcks);
 }
 
 void free_paths(path_t *paths)

@@ -15,7 +15,7 @@ void display_ants_movements(path_t *paths, int nb_of_ants)
     if (!ants_per_path)
         return (84);
     fae_put("#moves\n");
-    // TODO : display movements
+    display_movements_stdout(ants_per_path, nb_of_ants); // TODO
     free(ants_per_path);
     return (0);
 }
