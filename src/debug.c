@@ -5,7 +5,6 @@
 ** debug
 */
 
-#include <stdio.h>
-#include "tunnel.h"
+#include "debug.h"
 
 const int debug = 0;

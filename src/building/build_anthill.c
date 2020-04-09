@@ -62,7 +62,6 @@ void is_linker(char *entry, lm_tunnel_t **anthill)
     lm_tunnel_t *f_node = NULL;
     lm_tunnel_t *s_node = NULL;
     int pos = 0;
-
     if (!anthill)
         return;
     first = my_strndup(entry, my_strjump(entry, '-'));
@@ -110,7 +109,6 @@ lm_tunnel_t **build_anthill(char *filepath, int *nb_ants, int debug)
     if (!user_entry || *nb_ants <= 0)
         return (NULL);
     anthill = build_tunnels();
-    if (debug == 1)
-        debug_anthill(anthill);
+    debug_anthill(anthill);
     return (anthill);
 }

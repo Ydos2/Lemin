@@ -32,11 +32,13 @@ COVERAGE	=	$(MAIN:.c=.gcda)	\
 				$(SRC:.c=.gcda)	\
 				$(SRC:.c=.gcno)
 
+INCLUDE = ./include/
+
 NAME	=	lem_in
 
 TEST_NAME	=	unit_tests
 
-CFLAGS = -I./include -Wextra -W -Wall -pedantic
+CFLAGS = -I./include -Wextra -W -Wall -pedantic -fdiagnostics-color
 
 LIBS = -L lib/my/ -lmy -L lib/fae/ -lfae -L lib/list/ -llist
 
@@ -66,7 +68,7 @@ lib_fclean:
 	@make fclean -C lib/fae
 	@make fclean -C lib/list
 
-$(NAME):	$(OBJ)	lib_make
+$(NAME): lib_make $(OBJ)	
 	@gcc -o $(NAME) $(CFLAGS) $(OBJ) $(LIBS)
 
 clean: lib_clean

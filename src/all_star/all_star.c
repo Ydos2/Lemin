@@ -23,7 +23,7 @@ static void all_star_open(all_star_init_data_t init_data,
 
     for (int y = 0; (*current)->data->links[y]; y++) {
         current_check = (*current)->data->links[y];
-        if (!is_blocked((*current)->data->name, current_check->name, init_data)
+        if (!is_blocked(current_check->name, init_data)
             && !(is_open(*open_list, (*current)->data->links[y]))) {
             tmp = open_node(*current, current_check, open_list);
         }
@@ -74,17 +74,15 @@ static path_t launch_all_star(all_star_init_data_t init_data)
 
 path_t get_new_path(lm_tunnel_t **tunnels, int road_block_size, ...)
 {
-    vector2s_t *road_block = malloc(sizeof(vector2s_t) * road_block_size);
+    char **road_block = malloc(sizeof(char *) * road_block_size);
     va_list list;
     path_t path = {0};
 
     (debug) ? fae_put("\nLaunch path finding\nsearch roadblocks\n") : 1;
     va_start(list, road_block_size);
     for (int i = 0; i < road_block_size; i++) {
-        road_block[i].from = va_arg(list, char *);
-        road_block[i].to = va_arg(list, char *);
-        (debug) ? fae_put("    block %s to %s\n",
-                road_block[i].from, road_block[i].to) : 0;
+        road_block[i] = va_arg(list, char *);
+        (debug) ? fae_put("    node %s\n", road_block[i]) : 0;
     }
     va_end(list);
     set_start(tunnels);
@@ -96,11 +94,11 @@ path_t get_new_path(lm_tunnel_t **tunnels, int road_block_size, ...)
 }
 
 path_t get_new_path_srb(lm_tunnel_t **tunnels, int road_block_size,
-    vector2s_t *road_block)
+    char **road_block)
 {
     (debug) ? fae_put("Launch path finding\nset roadblocks\n") : 1;
     for (int i = 0; debug && i < road_block_size; i++)
-        fae_put("    block %s to %s\n", road_block[i].from, road_block[i].to);
+        fae_put("    node %s\n", road_block[i]);
     set_start(tunnels);
     (debug) ? fae_put("Roadblocks set\nbegin searching\nStart at ") : 1;
     return launch_all_star(

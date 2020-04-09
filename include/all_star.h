@@ -16,7 +16,7 @@
 typedef struct all_star_init_data {
     lm_tunnel_t **tunnels;
     int rb_size;
-    vector2s_t *rb;
+    char **rb;
 } all_star_init_data_t;
 
 typedef struct grid_node {
@@ -28,7 +28,7 @@ typedef struct grid_node {
 
 //utils
 void set_start(lm_tunnel_t **tunnels);
-int is_blocked(char *from, char *to, all_star_init_data_t init_data);
+int is_blocked(char *node, all_star_init_data_t init_data);
 int is_open(linked_list_t *open_list, lm_tunnel_t *tunnel);
 grid_node_t *get_nearest(linked_list_t *open_list);
 
