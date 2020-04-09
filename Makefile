@@ -11,6 +11,7 @@ SRC	=	src/building/build_anthill.c \
 		src/building/get_user_entry.c \
 		src/building/tunnels.c \
 		src/building/link.c \
+		src/building/command.c \
 		src/building/debug/debug_anthill.c \
 		src/all_star/debug_all_star.c \
 		src/all_star/all_star.c \
