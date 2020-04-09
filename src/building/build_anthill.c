@@ -99,16 +99,15 @@ lm_tunnel_t **build_tunnels(void)
     return (anthill);
 }
 
-lm_tunnel_t **build_anthill(char *filepath, int debug)
+lm_tunnel_t **build_anthill(char *filepath, int *nb_ants, int debug)
 {
     char *user_entry = NULL;
-    int ant = 0;
     lm_tunnel_t **anthill = NULL;
     int link_position = 0;
 
     user_entry = get_user_entry(user_entry);
-    ant = my_getnbr(user_entry);
-    if (!user_entry || ant <= 0)
+    *nb_ants = my_getnbr(user_entry);
+    if (!user_entry || *nb_ants <= 0)
         return (NULL);
     anthill = build_tunnels();
     if (debug == 1)

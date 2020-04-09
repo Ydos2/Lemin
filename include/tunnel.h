@@ -23,6 +23,6 @@ typedef struct lm_tunnel_s {
     int type;
     int link_nb;
     struct lm_tunnel_s **links;
-}lm_tunnel_t;
+} lm_tunnel_t;
 
 #endif /* !TUNNEL_H_ */

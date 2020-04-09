@@ -11,11 +11,11 @@
 typedef struct vector2_s {
     int x;
     int y;
-}vector2_t;
+} vector2_t;
 
 typedef struct vector2s_s {
     char *from;
     char *to;
-}vector2s_t;
+} vector2s_t;
 
 #endif /* !VECTOR2_H_ */
