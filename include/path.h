@@ -9,6 +9,7 @@
 #define PATH_H_
 
 #include "vector2.h"
+#include "tunnel.h"
 
 typedef struct path {
     lm_tunnel_t **path;

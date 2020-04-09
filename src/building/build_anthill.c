@@ -6,9 +6,12 @@
 */
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 #include "build_anthill.h"
 #include "vector2.h"
 #include "tunnel.h"
+#include "debug.h"
 #include "my.h"
 
 char *get_tunnel_name(char *str)
@@ -53,7 +56,6 @@ void is_linker(char *entry, lm_tunnel_t **anthill)
     lm_tunnel_t *f_node = NULL;
     lm_tunnel_t *s_node = NULL;
     int pos = 0;
-    
     if (!anthill)
         return;
     first = my_strndup(entry, my_strjump(entry, '-'));
@@ -90,18 +92,18 @@ lm_tunnel_t **build_tunnels(void)
     return (anthill);
 }
 
-lm_tunnel_t **build_anthill(char *filepath)
+lm_tunnel_t **build_anthill(char *filepath, int *nb_ants, int debug)
 {
     char *user_entry = NULL;
-    int ant = 0;
     lm_tunnel_t **anthill = NULL;
     int link_position = 0;
 
     user_entry = get_user_entry(user_entry);
-    ant = my_getnbr(user_entry);
-    if (!user_entry || ant <= 0)
+    *nb_ants = my_getnbr(user_entry);
+    if (!user_entry || *nb_ants <= 0)
         return (NULL);
     anthill = build_tunnels();
-    debug_anthill(anthill);
+    if (debug == 1)
+        debug_anthill(anthill);
     return (anthill);
 }

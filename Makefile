@@ -18,17 +18,31 @@ SRC	=	src/building/build_anthill.c \
 		src/all_star/node.c \
 		src/all_star/all_star_utils.c \
 		src/all_star/create_path.c \
+		src/ant_management/get_shortest_paths.c\
+		src/ant_management/ants_movements.c\
+		src/display/display.c\
 		src/debug.c \
+
+TESTS	=	tests/tests_lib/lib_tests_getnbr.c			\
+			tests/tests_lib/lib_tests_compute.c			\
+			tests/tests_src/src_tests_initialisation.c	\
 
 OBJ	=	$(SRC:.c=.o) $(MAIN:.c=.o)
 
+COVERAGE	=	$(MAIN:.c=.gcda)	\
+				$(MAIN:.c=.gcno)	\
+				$(TESTS:.c=.gcda)	\
+				$(TESTS:.c=.gcno)	\
+				$(SRC:.c=.gcda)	\
+				$(SRC:.c=.gcno)
+
 INCLUDE = ./include/
 
-NAME	=	lemin
+NAME	=	lem_in
 
-TEST_NAME	=	tests_a.out
+TEST_NAME	=	unit_tests
 
-CFLAGS = -I $(INCLUDE) -fdiagnostics-color
+CFLAGS = -I./include -Wextra -W -Wall -pedantic -fdiagnostics-color
 
 LIBS = -L lib/my/ -lmy -L lib/fae/ -lfae -L lib/list/ -llist
 
@@ -52,7 +66,7 @@ lib_clean:
 	@make clean -C lib/my
 	@make clean -C lib/fae
 	@make clean -C lib/list
-	
+
 lib_fclean:
 	@make fclean -C lib/my
 	@make fclean -C lib/fae
@@ -62,7 +76,9 @@ $(NAME): lib_make $(OBJ)
 	@gcc -o $(NAME) $(CFLAGS) $(OBJ) $(LIBS)
 
 clean: lib_clean
-	@rm -f $(OBJ)
+	@rm -f $(OBJ) $(COVERAGE)
+	@rm -f *.gcda
+	@rm -f *.gcno
 
 fclean: lib_fclean clean goodbye
 	@rm -f $(NAME)
@@ -71,12 +87,24 @@ debug:	lib_make
 	@gcc -o $(NAME) $(CFLAGS) $(MAIN) $(SRC) -g3 $(LIBS)
 	@echo -e "\033[1;91mDebug mod enabled !\033[0;39m"
 
-tests_run:	lib_make
-	@echo -e "\033[1;95mRunning tests...\033[0;39m"
+tests_run:	lib_make ## Launch tests
+	@echo -e "\033[1;31mCOMPILING TESTS...\033[0;39m"
 	@make -C lib/my
-	@gcc -o $(TEST_NAME) $(CFLAGS) $(SRC) $(LIBS) --coverage -lcriterion
+	@gcc -o $(TEST_NAME) $(CFLAGS) $(SRC) $(TESTS) $(LIBS) --coverage -lcriterion
 	./$(TEST_NAME)
 	gcovr
+	gcovr -b
 	@echo -e "\033[1;94mTest finished, here are the results\033[0;39m"
 
-re: fclean all
+re_tests: fclean tests_run ## Clean then tests
+
+re: fclean all ## Clean then compile
+
+valgrind:	CFLAGS += -g3
+valgrind:	fclean	all ## Launch valgrind
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET)
+
+help: ## Help for the Makefile
+	@cat $(MAKEFILE_LIST) | sed -En 's/^([a-zA-Z_-]+)\s*:.*##\s?(.*)/\1 "\2"/p' | xargs printf "\033[32m%-30s\033[0m %s\n"
+
+.PHONY:	all build clean fclean re tests_run re_tests valgrind help

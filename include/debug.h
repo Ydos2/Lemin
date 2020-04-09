@@ -8,6 +8,8 @@
 #ifndef DEBUG_H_
 #define DEBUG_H_
 
+#include "tunnel.h"
+
 extern const int debug;
 
-#endif /*DEBUG*/
+#endif /* !DEBUG_H_ */
