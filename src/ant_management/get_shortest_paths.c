@@ -18,8 +18,8 @@ path_t *get_shortest_paths(lm_tunnel_t **tunnels)
     paths = malloc(sizeof(path_t) * (nb_paths + 1));
     if (!paths)
         return (NULL);
-    for (int i = 0; i < nb_paths; i++)
-        paths[i].len = -1;
+    for (int i = 0; i <= nb_paths; i++)
+        (paths[i]).len = -1;
     if (find_shortest_paths(tunnels, paths, nb_paths) == 84)
         return (NULL);
     return (paths);
@@ -41,9 +41,8 @@ int find_shortest_paths(lm_tunnel_t **tunnels, path_t *paths, int nb_paths)
 
     for (int i = 0; i < nb_paths; i++) {
         roadblocks = get_roadblocks(&roadblocks_nb, roadblocks, paths[i]);
-        if (!roadblocks && i != 0)
-            return (84);
         paths[i] = get_new_path_srb(tunnels, roadblocks_nb, roadblocks);
+printf("len of path : %i\n", paths[i].len);
         if (paths[i].len == -1) {
             free(roadblocks);
             return (0);

@@ -61,7 +61,7 @@ int is_current_path_worth_it(int *ants_per_path, path_t *paths, int path_index)
     lapses_before = get_total_lapses(ants_per_path, paths);
     (ants_per_path[path_index])++;
     (ants_per_path[0])--;
-    lapses_before = get_total_lapses(ants_per_path, paths);
+    lapses_after = get_total_lapses(ants_per_path, paths);
     (ants_per_path[path_index])--;
     (ants_per_path[0])++;
     if (lapses_before > lapses_after)
