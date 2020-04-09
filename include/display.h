@@ -8,6 +8,7 @@
 #ifndef DEF_DISPLAY_H
 #define DEF_DISPLAY_H
 
+#include "tunnel.h"
 #include "path.h"
 
 void display_infos_anthill_stdout(int nb_ants, lm_tunnel_t **tunnels);

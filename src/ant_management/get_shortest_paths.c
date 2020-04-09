@@ -42,7 +42,6 @@ int find_shortest_paths(lm_tunnel_t **tunnels, path_t *paths, int nb_paths)
     for (int i = 0; i < nb_paths; i++) {
         roadblocks = get_roadblocks(&roadblocks_nb, roadblocks, paths[i]);
         paths[i] = get_new_path_srb(tunnels, roadblocks_nb, roadblocks);
-printf("len of path : %i\n", paths[i].len);
         if (paths[i].len == -1) {
             free(roadblocks);
             return (0);

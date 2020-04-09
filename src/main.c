@@ -10,6 +10,7 @@
 #include "main.h"
 #include "path.h"
 #include "ant_management.h"
+#include "display.h"
 
 static void draw_help(void)
 {

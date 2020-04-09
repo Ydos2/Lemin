@@ -50,6 +50,7 @@ void add_tunnel(lm_tunnel_t ***tunnel, vector2_t pos, char *name, int nb)
     my_strlen(name);
     *tunnel = add_space(*tunnel, nb);
     lm_tunnel = *tunnel;
+    lm_tunnel[nb - 1]->tunnel_id = nb - 1;
     lm_tunnel[nb - 1]->x = pos.x;
     lm_tunnel[nb - 1]->y = pos.y;
     lm_tunnel[nb - 1]->name = my_strdup(name);
