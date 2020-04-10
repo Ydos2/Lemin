@@ -6,6 +6,7 @@
 */
 
 #include <stdio.h>
+#include <unistd.h>
 #include "my.h"
 #include "main.h"
 #include "path.h"
@@ -16,7 +17,7 @@
 static void draw_help(void)
 {
     write(1, "USAGE\n", 6);
-    write(1, "\t./lem_in < anthill\n", 20);
+    write(1, "\t./lem_in_bonus anthill\n", 24);
 }
 
 static int start_lemin(char **av, int debug)
@@ -24,8 +25,11 @@ static int start_lemin(char **av, int debug)
     lm_tunnel_t **tunnels = 0;
     path_t *paths = NULL;
     int nb_ants = 0;
+    int old_stdout = dup(0);
+    FILE *fp1 = freopen(av[1], "r", stdin);
+    FILE *fp2 = fdopen(old_stdout, "w");
 
-    initialise_ncurse();
+    freopen(av[1], "r", stdin);
     tunnels = build_anthill(av[1], &nb_ants, debug);
     if (!tunnels)
         return (84);
@@ -37,6 +41,8 @@ static int start_lemin(char **av, int debug)
         free_paths(paths);
         return (84);
     }
+    fclose(stdin);
+    *stdin = *fp2;
     start_display_bonus(tunnels, paths);
     free_paths(paths);
     return (0);
@@ -45,19 +51,12 @@ static int start_lemin(char **av, int debug)
 int main(int ac, char **av)
 {
     int debug = 0;
-    int bonus = 0;
 
-    if (ac == 2) {
-        if (my_strcmp(av[1], "-h") == 0) {
-            draw_help();
-            return (0);
-        }
-        if (my_strcmp(av[1], "-d") == 0)
-            debug = 1;
-        if (debug == 1)
-            ac = 1;
-    }
-    if (ac != 1)
+    if (ac != 2)
         return (84);
+    if (my_strcmp(av[1], "-h") == 0) {
+        draw_help();
+        return (0);
+    }
     return (start_lemin(av, debug));
 }

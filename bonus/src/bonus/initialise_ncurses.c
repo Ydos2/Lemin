@@ -20,15 +20,19 @@ static void init_pair_void(void)
     init_pair(8, COLOR_BLACK, COLOR_WHITE);
 }
 
-void initialise_ncurse(void)
+void initialise_ncurse(screen_t *screen)
 {
     int	index[2];
 
+    screen->x = 0;
+    screen->y = 0;
     initscr();
     raw();
-    noecho();
-    curs_set(0);
     keypad(stdscr, TRUE);
+    noecho();
+    curs_set(FALSE);
+    nodelay(stdscr, TRUE);
     start_color();
+    clear();
     init_pair_void();
 }
