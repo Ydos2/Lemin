@@ -9,7 +9,7 @@
 
 int display_ants_movements(path_t *paths, int nb_of_ants)
 {
-    int *ants_per_path = NULL; // display
+    int *ants_per_path = NULL;
 
     ants_per_path = get_ants_per_path(paths, nb_of_ants);
     if (!ants_per_path)

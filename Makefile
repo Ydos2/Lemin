@@ -40,6 +40,8 @@ INCLUDE = ./include/
 
 NAME	=	lem_in
 
+NAME_BONUS	=	lem_in_bonus
+
 TEST_NAME	=	unit_tests
 
 CFLAGS = -I./include -Wextra -W -Wall -pedantic -fdiagnostics-color
@@ -72,20 +74,45 @@ lib_fclean:
 	@make fclean -C lib/fae
 	@make fclean -C lib/list
 
+bonus_make:
+	@cp ./include ./bonus/include -rf
+	@cp ./src/all_star ./bonus/src/all_star -rf
+	@cp ./src/ant_management ./bonus/src/ant_management -rf
+	@cp ./src/building ./bonus/src/building -rf
+	@cp ./src/display ./bonus/src/display -rf
+	@cp ./src/debug.c ./bonus/src/debug.c -rf
+	@make re -C bonus
+	@cp ./bonus/lem_in_bonus ./ -rf
+bonus_clean:
+	@make clean -C bonus
+
+bonus_fclean:
+	@rm	./bonus/include/include -rf
+	@rm ./bonus/src/all_star -rf
+	@rm ./bonus/src/ant_management -rf
+	@rm ./bonus/src/building -rf
+	@rm ./bonus/src/display -rf
+	@rm ./bonus/src/debug.c -rf
+	@make fclean -C bonus
+
 $(NAME): lib_make $(OBJ)
 	@gcc -o $(NAME) $(CFLAGS) $(OBJ) $(LIBS)
 
-clean: lib_clean
+clean: lib_clean bonus_clean
 	@rm -f $(OBJ) $(COVERAGE)
 	@rm -f *.gcda
 	@rm -f *.gcno
 
-fclean: lib_fclean clean goodbye
+fclean: lib_fclean bonus_fclean clean goodbye
 	@rm -f $(NAME)
+	@rm -f $(NAME_BONUS)
 
 debug:	lib_make
 	@gcc -o $(NAME) $(CFLAGS) $(MAIN) $(SRC) -g3 $(LIBS)
 	@echo -e "\033[1;91mDebug mod enabled !\033[0;39m"
+
+bonus:	bonus_make
+	@echo -e "\033[1;91mBonus mod enabled !\033[0;39m"
 
 tests_run:	lib_make ## Launch tests
 	@echo -e "\033[1;31mCOMPILING TESTS...\033[0;39m"
