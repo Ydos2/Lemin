@@ -6,6 +6,7 @@
 */
 
 #include <stddef.h>
+#include <unistd.h>
 #include "fae.h"
 #include "display.h"
 
@@ -18,14 +19,20 @@ static lm_tunnel_t *get_room_by_id(lm_tunnel_t **tunnels, int id)
     return (NULL);
 }
 
-static void display_rooms(lm_tunnel_t **tunnels)
+int is_digit(char c)
+{
+    if ('0' <= c && c <= '9')
+        return (1);
+    return (0);
+}
+
+static void display_rooms_and_tunnels(lm_tunnel_t **tunnels, char **t)
 {
     lm_tunnel_t *tunnel = NULL;
-    int tunnels_nb = 0;
+    int len = 0;
 
-    fae_put("#rooms\n");
-    for (; tunnels[tunnels_nb]; tunnels_nb++);
-    for (int i = 0; i < tunnels_nb; i++) {
+    for (; tunnels[len]; len++);
+    for (int i = 0; i < len; i++) {
         tunnel = get_room_by_id(tunnels, i);
         if (tunnel->type == START)
             fae_put("##start\n");
@@ -33,19 +40,35 @@ static void display_rooms(lm_tunnel_t **tunnels)
             fae_put("##end\n");
         fae_put("%s %d %d\n", tunnel->name, tunnel->x, tunnel->y);
     }
-}
-
-static void display_tunnels(lm_tunnel_t **tunnels)
-{
     fae_put("#tunnels\n");
-    // add every tunnel
+    for (int i = 0; t[i]; i++) {
+        if (t[i][0] == '#')
+            continue;
+        for (len = 0; t[i][len] == '-' || is_digit(t[i][len]); len++);
+        write(1, t[i], len);
+        write(1, "\n", 1);
+    }
 }
 
-void display_infos_anthill_stdout(int nb_of_ants, lm_tunnel_t **tunnels)
+void display_infos_stdout(int nb_of_ants, lm_tunnel_t **tunnels, char **t)
 {
     fae_put("#number_of_ants\n%d\n", nb_of_ants);
-    display_rooms(tunnels);
-    display_tunnels(tunnels);
+    for (int i = 0; *t; t++, i = 0) {
+        if (!is_digit((*t)[i]))
+            continue;
+        for (; is_digit((*t)[i]); i++);
+        if ((*t)[i] != '-')
+            continue;
+        i++;
+        if (!is_digit((*t)[i]))
+            continue;
+        for (; is_digit((*t)[i]); i++);
+        if ((*t)[i] != 0)
+            continue;
+        break;
+    }
+    fae_put("#rooms\n");
+    display_rooms_and_tunnels(tunnels, t);
 }
 
 void display_movements_stdout(int *ants_per_path, int nb_of_ants)

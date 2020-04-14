@@ -22,15 +22,16 @@ static int start_lemin(char **av, int debug)
 {
     lm_tunnel_t **tunnels = 0;
     path_t *paths = NULL;
+    char **tunnels_stdin = NULL;
     int nb_ants = 0;
 
-    tunnels = build_anthill(av[1], &nb_ants, debug);
+    tunnels = build_anthill(av[1], &nb_ants, &tunnels_stdin, debug);
     if (!tunnels)
         return (84);
     paths = get_shortest_paths(tunnels);
     if (!paths)
         return (84);
-    display_infos_anthill_stdout(nb_ants, tunnels);
+    display_infos_stdout(nb_ants, tunnels, tunnels_stdin);
     if (display_ants_movements(paths, nb_ants) == 84) {
         free_paths(paths);
         return (84);

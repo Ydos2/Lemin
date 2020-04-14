@@ -69,7 +69,7 @@ void is_linker(char *entry, lm_tunnel_t **anthill)
     link_nodes(f_node, s_node);
 }
 
-lm_tunnel_t **build_tunnels(void)
+lm_tunnel_t **build_tunnels(char ***tunnels_stdin)
 {
     lm_tunnel_t **anthill = NULL;
     char *user_entry = NULL;
@@ -77,7 +77,7 @@ lm_tunnel_t **build_tunnels(void)
     int tunnel_type = NORMAL;
 
     while (1) {
-        user_entry = get_user_entry(user_entry);
+        user_entry = get_user_entry(user_entry, tunnels_stdin);
         if (!user_entry)
             break;
         if (is_valid_tunnel(user_entry, &anthill, tunnel_type, tunnel_nb + 1)) {
@@ -92,17 +92,19 @@ lm_tunnel_t **build_tunnels(void)
     return (anthill);
 }
 
-lm_tunnel_t **build_anthill(char *filepath, int *nb_ants, int debug)
+lm_tunnel_t **build_anthill(char *filepath, int *nb_ants, char ***t, int debug)
 {
     char *user_entry = NULL;
     lm_tunnel_t **anthill = NULL;
     int link_position = 0;
 
-    user_entry = get_user_entry(user_entry);
+    *t = malloc(sizeof(char *));
+    (*t)[0] = NULL;
+    user_entry = get_user_entry(user_entry, t);
     *nb_ants = my_getnbr(user_entry);
     if (!user_entry || *nb_ants <= 0)
         return (NULL);
-    anthill = build_tunnels();
+    anthill = build_tunnels(t);
     if (debug == 1)
         debug_anthill(anthill);
     return (anthill);
