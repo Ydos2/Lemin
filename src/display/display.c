@@ -19,13 +19,6 @@ static lm_tunnel_t *get_room_by_id(lm_tunnel_t **tunnels, int id)
     return (NULL);
 }
 
-int is_digit(char c)
-{
-    if ('0' <= c && c <= '9')
-        return (1);
-    return (0);
-}
-
 static void display_rooms_and_tunnels(lm_tunnel_t **tunnels, char **t)
 {
     lm_tunnel_t *tunnel = NULL;
@@ -50,6 +43,13 @@ static void display_rooms_and_tunnels(lm_tunnel_t **tunnels, char **t)
     }
 }
 
+int is_digit(char c)
+{
+    if ('0' <= c && c <= '9')
+        return (1);
+    return (0);
+}
+
 void display_infos_stdout(int nb_of_ants, lm_tunnel_t **tunnels, char **t)
 {
     fae_put("#number_of_ants\n%d\n", nb_of_ants);
@@ -69,10 +69,4 @@ void display_infos_stdout(int nb_of_ants, lm_tunnel_t **tunnels, char **t)
     }
     fae_put("#rooms\n");
     display_rooms_and_tunnels(tunnels, t);
-}
-
-void display_movements_stdout(int *ants_per_path, int nb_of_ants)
-{
-    fae_put("#moves\n");
-    // add moves
 }
