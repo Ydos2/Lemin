@@ -9,6 +9,11 @@
 #include "fae.h"
 #include "display.h"
 
+static void display_lap()
+{
+
+}
+
 void display_movements_stdout(path_t *paths, int *ants_per_path, int nb_ants)
 {
     int nb_paths = 0;

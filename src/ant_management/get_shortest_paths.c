@@ -36,18 +36,19 @@ int get_max_nb_of_paths(lm_tunnel_t **tunnels)
 
 int find_shortest_paths(lm_tunnel_t **tunnels, path_t *paths, int nb_paths)
 {
-    int roadblocks_nb = 0;
-    char **roadblocks = NULL;
+    int roadblcks_nb = 0;
+    char **roadblcks = NULL;
 
     for (int i = 0; i < nb_paths; i++) {
-        roadblocks = get_roadblocks(&roadblocks_nb, roadblocks, paths[i]);
-        paths[i] = get_new_path_srb(tunnels, roadblocks_nb, roadblocks);
+        if (i > 0)
+            roadblcks = get_roadblocks(&roadblcks_nb, roadblcks, paths[i - 1]);
+        paths[i] = get_new_path_srb(tunnels, roadblcks_nb, roadblcks);
         if (paths[i].len == -1) {
-            free(roadblocks);
+            free(roadblcks);
             return (0);
         }
     }
-    free(roadblocks);
+    free(roadblcks);
     return (0);
 }
 
