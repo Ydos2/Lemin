@@ -14,27 +14,23 @@ static int update_camera(int input, screen_t *screen)
 {
     switch (input) {
         case KEY_LEFT:
-            clear();
             screen->x--;
-            printw("X coord : %d\nY coord : %d", screen->x, screen->y);
-            return (1);
+            break;
         case KEY_RIGHT:
-            clear();
             screen->x++;
-            printw("X coord : %d\nY coord : %d", screen->x, screen->y);
-            return (1);
+            break;
         case KEY_UP:
-            clear();
             screen->y--;
-            printw("X coord : %d\nY coord : %d", screen->x, screen->y);
-            return (1);
+            break;
         case KEY_DOWN:
-            clear();
             screen->y++;
-            printw("X coord : %d\nY coord : %d", screen->x, screen->y);
-            return (1);
+            break;
+        default:
+            return (0);
     }
-    return (0);
+    clear();
+    printw("X coord : %d\nY coord : %d", screen->x, screen->y);
+    return (1);
 }
 
 static void display_start_end(int nbr_turn, path_t *paths,
@@ -53,25 +49,32 @@ static void display_start_end(int nbr_turn, path_t *paths,
 static int diplay_node(lm_tunnel_t **tunnels,
     screen_t *screen, path_t *paths, int turn)
 {
-    int nbr_turn = 0;
-
     attron(COLOR_PAIR(3));
     for (int nbr = 0; tunnels[nbr] != NULL; nbr++) {
         mvprintw(tunnels[nbr]->y + screen->y,
             tunnels[nbr]->x + screen->x, " ");
     }
-    attroff(COLOR_PAIR(3));/*
-    for (; paths->path[nbr_turn] != NULL; nbr_turn++);
-    display_start_end(nbr_turn, paths, screen);
-    if (nbr_turn <= turn)
+    attroff(COLOR_PAIR(3));
+    display_start_end(paths->len, paths, screen);
+    if (paths->len - 1 <= turn)
         return (-1);
     attron(COLOR_PAIR(4));
     for (int nbr = 0; nbr <= turn; nbr++) {
         mvprintw(paths->path[nbr]->y + screen->y,
             paths->path[nbr]->x + screen->x, " ");
     }
-    attroff(COLOR_PAIR(4));*/
+    attroff(COLOR_PAIR(4));
     return (1);
+}
+
+static int loop_node(lm_tunnel_t **tunnels, path_t *paths,
+    screen_t *screen, int turn)
+{
+    if (diplay_node(tunnels, screen, paths, turn) == -1)
+        turn = 0;
+    else
+        turn++;
+    return (turn);
 }
 
 void start_display_bonus(lm_tunnel_t **tunnels, path_t *paths)
@@ -88,10 +91,7 @@ void start_display_bonus(lm_tunnel_t **tunnels, path_t *paths)
         if (update_camera(input, screen) == 1)
             diplay_node(tunnels, screen, paths, turn);
         if (timeur > 100000) {
-            if (diplay_node(tunnels, screen, paths, turn) == -1)
-                turn = 0;
-            else
-                turn++;
+            turn = loop_node(tunnels, paths, screen, turn);
             timeur = 0;
         }
         refresh();
