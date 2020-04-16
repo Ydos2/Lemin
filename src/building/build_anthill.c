@@ -101,6 +101,10 @@ lm_tunnel_t **build_anthill(char *filepath, int *nb_ants, char ***t, int debug)
     *t = malloc(sizeof(char *));
     (*t)[0] = NULL;
     user_entry = get_user_entry(user_entry, t);
+    for (int i = 0; user_entry[i]; i++) {
+        if (user_entry[i] < '0' || '9' < user_entry[i])
+            return (NULL);
+    }
     *nb_ants = my_getnbr(user_entry);
     if (!user_entry || *nb_ants <= 0)
         return (NULL);
