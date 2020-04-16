@@ -26,7 +26,7 @@ static int start_lemin(char **av, int debug)
     int nb_ants = 0;
 
     tunnels = build_anthill(av[1], &nb_ants, &tunnels_stdin, debug);
-    if (!tunnels)
+    if (!tunnels || detect_errors(tunnels))
         return (84);
     paths = get_shortest_paths(tunnels);
     if (!paths)

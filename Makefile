@@ -13,6 +13,7 @@ SRC	=	src/building/build_anthill.c \
 		src/building/link.c \
 		src/building/command.c \
 		src/building/debug/debug_anthill.c \
+		src/error_management.c\
 		src/all_star/debug_all_star.c \
 		src/all_star/all_star.c \
 		src/all_star/node.c \
