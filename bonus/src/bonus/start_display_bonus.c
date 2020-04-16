@@ -6,6 +6,7 @@
 */
 
 #include <ncurses.h>
+#include <stdlib.h>
 #include "main.h"
 #include "bonus.h"
 
@@ -59,17 +60,17 @@ static int diplay_node(lm_tunnel_t **tunnels,
         mvprintw(tunnels[nbr]->y + screen->y,
             tunnels[nbr]->x + screen->x, " ");
     }
-    attroff(COLOR_PAIR(3));
+    attroff(COLOR_PAIR(3));/*
     for (; paths->path[nbr_turn] != NULL; nbr_turn++);
     display_start_end(nbr_turn, paths, screen);
     if (nbr_turn <= turn)
         return (-1);
     attron(COLOR_PAIR(4));
-    for (int nbr = 0; nbr <= turn; nbr++) {/*
+    for (int nbr = 0; nbr <= turn; nbr++) {
         mvprintw(paths->path[nbr]->y + screen->y,
-            paths->path[nbr]->x + screen->x, " ");*/
+            paths->path[nbr]->x + screen->x, " ");
     }
-    attroff(COLOR_PAIR(4));
+    attroff(COLOR_PAIR(4));*/
     return (1);
 }
 
