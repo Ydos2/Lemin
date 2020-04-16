@@ -6,6 +6,7 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include "my.h"
 #include "main.h"
@@ -20,23 +21,9 @@ static void draw_help(void)
     write(1, "\t./lem_in_bonus anthill\n", 24);
 }
 
-static int start_lemin(char **av, int debug)
+static void start_bonus(lm_tunnel_t **tunnels, path_t *paths,
+    FILE *fp2, int nb_ants)
 {
-    lm_tunnel_t **tunnels = 0;
-    path_t *paths = NULL;
-    int nb_ants = 0;
-    int old_stdout = dup(0);
-    FILE *fp1 = freopen(av[1], "r", stdin);
-    FILE *fp2 = fdopen(old_stdout, "w");
-
-    freopen(av[1], "r", stdin);
-    tunnels = build_anthill(av[1], &nb_ants, debug);
-    if (!tunnels)
-        return (84);
-    paths = get_shortest_paths(tunnels);
-    if (!paths)
-        return (84);
-    display_infos_anthill_stdout(nb_ants, tunnels);
     if (display_ants_movements(paths, nb_ants) == 84) {
         free_paths(paths);
         return (84);
@@ -45,6 +32,27 @@ static int start_lemin(char **av, int debug)
     *stdin = *fp2;
     start_display_bonus(tunnels, paths);
     free_paths(paths);
+}
+
+static int start_lemin(char **av, int debug)
+{
+    lm_tunnel_t **tunnels = 0;
+    path_t *paths = NULL;
+    char **tunnels_stdin = NULL;
+    int nb_ants = 0;
+    int old_stdout = dup(0);
+    FILE *fp1 = freopen(av[1], "r", stdin);
+    FILE *fp2 = fdopen(old_stdout, "w");
+
+    freopen(av[1], "r", stdin);
+    tunnels = build_anthill(av[1], &nb_ants, &tunnels_stdin, debug);
+    if (!tunnels)
+        return (84);
+    paths = get_shortest_paths(tunnels);
+    if (!paths)
+        return (84);
+    display_infos_stdout(nb_ants, tunnels, tunnels_stdin);
+    start_bonus(tunnels, paths, fp2, nb_ants);
     return (0);
 }
 

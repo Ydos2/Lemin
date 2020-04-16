@@ -21,6 +21,7 @@ SRC	=	src/building/build_anthill.c 			\
 		src/ant_management/get_shortest_paths.c	\
 		src/ant_management/ants_movements.c		\
 		src/display/display.c					\
+		src/display/display_movements_stdout.c	\
 		src/debug.c				 				\
 		src/bonus/initialise_ncurses.c			\
 		src/bonus/start_display_bonus.c			\
