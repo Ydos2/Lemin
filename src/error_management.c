@@ -16,9 +16,9 @@ static int check_end_and_start(lm_tunnel_t **tunnels)
     for (int i = 0; tunnels[i]; i++) {
         starts_found += (tunnels[i]->type == START);
         ends_found += (tunnels[i]->type == END);
-        if (starts_found > 1 || ends_found > 1)
-            return (84);
     }
+    if (starts_found != 1 || ends_found != 1)
+        return (84);
     return (0);
 }
 

@@ -29,7 +29,7 @@ static int start_lemin(char **av, int debug)
     if (!tunnels || detect_errors(tunnels))
         return (84);
     paths = get_shortest_paths(tunnels);
-    if (!paths)
+    if (!paths || !get_new_path_srb(tunnels, 0, NULL).path)
         return (84);
     display_infos_stdout(nb_ants, tunnels, tunnels_stdin);
     if (display_ants_movements(paths, nb_ants) == 84) {
