@@ -35,7 +35,7 @@ lm_tunnel_t **add_space(lm_tunnel_t **tunnel, int nb)
         new[nb] = 0;
         return (new);
     }
-    for (int i = 0; i != nb; i++)
+    for (int i = 0; i < nb - 1; i++)
         new[i] = tunnel[i];
     new[nb - 1] = malloc(sizeof(lm_tunnel_t));
     new[nb] = NULL;
